@@ -1,0 +1,3 @@
+Paper implemented - https://www.cs.cmu.edu/~rsalakhu/papers/oneshot1.pdf
+
+Labeled Faces in the Wild  - http://vis-www.cs.umass.edu/lfw/
