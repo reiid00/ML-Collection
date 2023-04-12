@@ -9,7 +9,6 @@ Welcome to the `ml-collection` repository! This repository is a showcase of my p
   - [Papers](#papers)
 - [Getting Started](#getting-started)
 - [Contributing](#contributing)
-- [License](#license)
 - [Contact](#contact)
 
 ## Overview
@@ -43,10 +42,6 @@ Navigate to the desired project or paper implementation folder and follow the in
 ## Contributing
 
 I am always open to feedback and suggestions for improvement. If you would like to contribute to this repository, please feel free to submit a pull request or raise an issue. Your contributions are highly appreciated!
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contact
 
