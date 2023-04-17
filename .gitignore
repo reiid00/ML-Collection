@@ -1,3 +1,5 @@
 /Collection/Projects/Story-Teller/NLP/data/books
 /Collection/Projects/Story-Teller/NLP/processed_books.txt
 Collection/Projects/Story-Teller/NLP/cached_lm_GPT2Tokenizer_128_processed_books.txt
+*.0
+*.1
