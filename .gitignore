@@ -5,4 +5,7 @@ Collection/Projects/Story-Teller/NLP/cached_lm_GPT2Tokenizer_128_processed_books
 *.1
 Collection/Projects/Story-Teller/NLP/test_dataset.txt
 Collection/Projects/Story-Teller/NLP/train_dataset.txt
-Collection/Projects/Story-Teller/NLP/cached_lm_GPT2Tokenizer_128_train_dataset.txt.lock
+Collection/Projects/Story-Teller/NLP/logs
+Collection/Projects/Story-Teller/NLP/output
+Collection/Projects/Story-Teller/NLP/output_nlp
+Collection/Projects/Story-Teller/NLP/cached*
