@@ -7,6 +7,13 @@ from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 from torch.utils.tensorboard import SummaryWriter
 
+# ToDo: Improve GAN
+
+# 1. Larger Network
+# 2. Normalization with BatchNorm
+# 3. Different Learning Rate
+# 4. Change architecture to CNN
+
 class Discriminator(nn.Module):
 
     def __init__(self, img_dim,out_features=128,act_val=0.1):
