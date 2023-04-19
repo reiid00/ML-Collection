@@ -76,25 +76,8 @@ class Generator(nn.Module):
     def forward(self, x):
         return self.generator(x)
 
-def __init_weights(model):
+def initialize_weights(model):
     for m in model.modules():
         if isinstance(m, (nn.Conv2d, nn.ConvTranspose2d, nn.BatchNorm2d)):
             nn.init.normal_(m.weight.data, 0.0, 0.02)
 
-def test():
-
-    N, in_channels, H, W = 8, 3, 64, 64
-    z_dim = 100
-    x = torch.randn((N, in_channels, H, W))
-    disc = Discriminator(in_channels, 8)
-    __init_weights(disc)
-    assert disc(x).shape == (N,1,1,1)
-    generator= Generator(z_dim, in_channels, 8)
-    z = torch.randn((N, z_dim,1,1))
-    __init_weights(disc)
-    print(generator(z).shape)
-    print((N, in_channels, H, W))
-    assert generator(z).shape == (N, in_channels, H, W)
-
-
-test()

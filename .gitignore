@@ -12,3 +12,6 @@ Collection/Projects/Story-Teller/NLP/cached*
 Collection/Models/SimpleGAN/dataset
 Collection/Models/SimpleGAN/runs*
 dataset/MNIST/raw*
+data/*
+dataset/*
+Collection/Models/DCGAN/__pycache__*
