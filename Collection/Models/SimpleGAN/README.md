@@ -2,7 +2,7 @@
 
 This repository is a follow-along implementation of the GAN (Generative Adversarial Network) paper presented by Goodfellow et al. in 2014. It is based on the tutorial series created by Alladin Persson on his YouTube channel.
 
-Link to the tutorial playlist: https://www.youtube.com/watch?v=IZtv9s_Wx9I&list=PLhhyoLH6IjfwIp8bZnzX8QR30TRcHO8Va&index=3
+Link to the tutorial playlist: [Building our first simple GAN - Aladdin Persson](https://www.youtube.com/watch?v=OljTVUVzPpM)
 
 The GAN model is a type of generative model that uses two neural networks, a generator and a discriminator, to generate new data that resembles the training data. This implementation follows the architecture and techniques presented in the paper, with some modifications and improvements that will be added to the original work.
 
