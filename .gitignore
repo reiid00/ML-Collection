@@ -14,4 +14,4 @@ Collection/Models/SimpleGAN/runs*
 dataset/MNIST/raw*
 data/*
 dataset/*
-Collection/Models/DCGAN/__pycache__*
+**/__pycache__/
