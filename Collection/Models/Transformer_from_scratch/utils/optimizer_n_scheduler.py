@@ -22,6 +22,9 @@ class NoamScheduler:
     def learning_rate(self):
         return self.d_model ** (-0.5) * min(self.current_step ** (-0.5), self.current_step * self.warmup_steps ** (-1.5))
 
+    def zero_grad(self):
+        self.optimizer.zero_grad()
+
 def create_optimizer_and_scheduler(model, d_model, warmup_steps, init_lr, weight_decay=0.0, original=False):
     # Not original Adam Optimizer
     # Using Adam with Weight Decay and AMSGRAD
