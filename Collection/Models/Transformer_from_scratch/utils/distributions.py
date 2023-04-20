@@ -6,6 +6,8 @@ import torch.nn as nn
 # of label smoothing, which inherently involves comparing two probability
 # distributions (true distribution and models). KL Divergence is a popular
 # choice for this context as it measures the dissimilarity between two probability distributions
+
+# Paper value for label_smoothing: 0.1
 class LabelSmoothingKLDivergenceLoss(nn.Module):
     def __init__(self, label_smoothing, tgt_vocab_size, ignore_index=-100):
         super(LabelSmoothingKLDivergenceLoss, self).__init__()
@@ -41,5 +43,11 @@ class LabelSmoothingKLDivergenceLoss(nn.Module):
         # Calculating KL Div Loss by Hand, can be handful if we want to change the loss function
         # loss = -(true_dist * output).sum(dim=1)
         loss = self.kl_div_loss(output, true_dist.detach()).sum(dim=1)
-        loss = (loss * non_pad_mask).sum() / non_pad_mask.sum()
+
+        # Apply non_padding mask to the loss and compute the sum of the loss values
+        loss = (loss * non_pad_mask).sum()
+
+        # Divide by the sum of the non_padding mask to get average loss per token
+        loss = loss / non_pad_mask.sum()
+
         return true_dist, loss # For analysing the distribution.
