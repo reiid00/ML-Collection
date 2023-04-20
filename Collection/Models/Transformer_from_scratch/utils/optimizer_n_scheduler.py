@@ -22,7 +22,17 @@ class NoamScheduler:
     def learning_rate(self):
         return self.d_model ** (-0.5) * min(self.current_step ** (-0.5), self.current_step * self.warmup_steps ** (-1.5))
 
-def create_optimizer_and_scheduler(model, d_model, warmup_steps, init_lr):
-    optimizer = optim.Adam(model.parameters(), lr=init_lr, betas=(0.9, 0.98), eps=1e-9)
+def create_optimizer_and_scheduler(model, d_model, warmup_steps, init_lr, weight_decay=0.0, original=False):
+    # Not original Adam Optimizer
+    # Using Adam with Weight Decay and AMSGRAD
+    # AMSGRAD is a variant of the Adam Optimizer that adresses the issue of convergence in certain settings
+    # Maintains a maximum of past squared gradients, ensuring better convergence properties
+
+    # Weight Decay prevents overfitting
+    # Adds a penalty term to the loss function
+    optimizer = optim.AdamW(model.parameters(), lr=init_lr, betas=(0.9, 0.98), eps=1e-9, weight_decay=weight_decay, amsgrad=True)
+
+    # In case we want to follow the original paper
+    if original : optimizer = optimizer = optim.Adam(model.parameters(), lr=init_lr, betas=(0.9, 0.98), eps=1e-9)
     scheduler = NoamScheduler(optimizer, d_model, warmup_steps)
     return optimizer, scheduler
