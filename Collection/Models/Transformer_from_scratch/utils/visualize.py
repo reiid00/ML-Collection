@@ -44,3 +44,19 @@ def view_attention_weights(model, src_text, tgt_text):
 
     outfile = f"dec_enc_attention_weights_layer{layer}_head{head}.png"
     plot_attention_weights(dec_enc_attention_weights, layer, head, outfile)
+
+def plot_learning_rate_decay(scheduler, num_steps, outfile=None):
+    learning_rates = []
+    for step in range(1, num_steps + 1):
+        scheduler.current_step = step
+        learning_rates.append(scheduler.learning_rate())
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(learning_rates)
+    plt.title("Learning Rate Decay")
+    plt.xlabel("Training Steps")
+    plt.ylabel("Learning Rate")
+    plt.grid()
+    if outfile is not None:
+        plt.savefig(outfile)
+    plt.show()
