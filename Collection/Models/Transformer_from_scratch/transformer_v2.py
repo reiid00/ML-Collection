@@ -29,10 +29,12 @@ class Transformer(nn.Module):
 
         # Pass the input through the encoder layers
         enc_output = src_emb
+        enc_attention_weights = []
         for layer in self.encoder_layers:
-            enc_output = layer(enc_output, src_mask)
-        
-        return enc_output
+            enc_output, attn_weights  = layer(enc_output, src_mask)
+            enc_attention_weights.append(attn_weights)
+
+        return enc_output, enc_attention_weights
 
     def decode(self, tgt, enc_output, src_mask, tgt_mask):
         # Apply the output embedding and positional encoding
@@ -41,21 +43,27 @@ class Transformer(nn.Module):
 
         # Pass the output through the decoder layers with the encoded input
         dec_output = tgt_emb
+        dec_attention_weights = []
+        dec_cross_attention_weights = []
         for layer in self.decoder_layers:
-            dec_output = layer(dec_output, enc_output, src_mask, tgt_mask)
+            dec_output, attn_weights, cross_attention_weights = layer(dec_output, enc_output, src_mask, tgt_mask)
+            dec_attention_weights.append(attn_weights)
+            dec_cross_attention_weights.append(cross_attention_weights)
         
-        return dec_output
+        return dec_output, dec_attention_weights, dec_cross_attention_weights
 
-    def forward(self, src, tgt, src_mask, tgt_mask):
+    def forward(self, src, tgt, src_mask, tgt_mask, return_attention = False):
         # Encode the input
-        enc_output = self.encode(src, src_mask)
+        enc_output, enc_attention_weights = self.encode(src, src_mask)
 
         # Decode the output using the encoded input
-        dec_output = self.decode(tgt, enc_output, src_mask, tgt_mask)
+        dec_output, dec_attention_weights, dec_cross_attention_weights = self.decode(tgt, enc_output, src_mask, tgt_mask)
 
         # Generate the output probabilities
         output_probs = F.log_softmax(self.generator(dec_output), dim=-1)
 
+        if return_attention:
+            return output_probs, enc_attention_weights, dec_attention_weights, dec_cross_attention_weights
         return output_probs
 
 class DecoderLayer(nn.Module):
@@ -71,17 +79,17 @@ class DecoderLayer(nn.Module):
 
     def masked_self_attention(self, x, tgt_mask):
         # Perform (Masked) self-attention on the input
-        attn_output, _ = self.self_attn(x, x, x, tgt_mask)
+        attn_output, attn_weights = self.self_attn(x, x, x, tgt_mask)
 
         # Add & Norm (Masked) masked_self_attention output + "x", input, in this case, output
-        return self.layer_norm1(x + self.dropout(attn_output))
+        return self.layer_norm1(x + self.dropout(attn_output)), attn_weights
 
     def cross_attention(self, x, enc_output, src_mask):
         # Perform cross-attention using the encoded input
-        attn_output, _ = self.cross_attn(x, enc_output, enc_output, src_mask)
+        attn_output, cross_attn_weights = self.cross_attn(x, enc_output, enc_output, src_mask)
 
         # Add & Norm cross-attention output +  + layer_norm1 output
-        return self.layer_norm2(x + self.dropout(attn_output))
+        return self.layer_norm2(x + self.dropout(attn_output)), cross_attn_weights
 
     def positionwise_feedforward(self, x):
         # Apply the position-wise feed-forward network
@@ -92,15 +100,15 @@ class DecoderLayer(nn.Module):
 
     def forward(self, x, enc_output, src_mask, tgt_mask):
         # Apply masked_self_attention + Add & Norm
-        x = self.masked_self_attention(x, tgt_mask)
+        x, attn_weights = self.masked_self_attention(x, tgt_mask)
 
         # Apply cross-attention with the encoded input + Add & Norm
-        x = self.cross_attention(x, enc_output, src_mask)
+        x, cross_attn_weights = self.cross_attention(x, enc_output, src_mask)
 
         # Apply position-wise feed-forward network + Add & Norm
         x = self.positionwise_feedforward(x)
 
-        return x
+        return x, attn_weights, cross_attn_weights
 
 class EncoderLayer(nn.Module):
     def __init__(self, d_model, num_heads, d_ff, dropout=0.1):
@@ -114,10 +122,10 @@ class EncoderLayer(nn.Module):
     def self_attention(self, x, mask):
 
         # Perform self-attention on the input
-        attn_output, _ = self.self_attn(x, x, x, mask)
+        attn_output, attn_weights = self.self_attn(x, x, x, mask)
 
         # Add & Norm self-attention output + "x", input
-        return self.layer_norm1(x + self.dropout(attn_output))
+        return self.layer_norm1(x + self.dropout(attn_output)), attn_weights
 
     def positionwise_feedforward(self, x):
 
@@ -129,12 +137,12 @@ class EncoderLayer(nn.Module):
 
     def forward(self, x, mask):
         # Apply self-attention + Add & Norm
-        x = self.self_attention(x, mask)
+        x, attn_weights= self.self_attention(x, mask)
 
         # Apply position-wise feed-forward network + Add & Norm
         x = self.positionwise_feedforward(x)
 
-        return x
+        return x, attn_weights
 
 class MultiHeadAttention(nn.Module):
     def __init__(self, d_model, num_heads, dropout=0.1):
