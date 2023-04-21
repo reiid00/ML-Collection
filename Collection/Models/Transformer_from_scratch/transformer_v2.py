@@ -269,6 +269,10 @@ class PositionalEncoding(nn.Module):
         # x.shape : (batch_size, seq_len, d_model)
         x = x + self.pe[:, :x.size(1)]
         return x
+    
+    def get_encodings(self):
+        encodings = self.pe.squeeze(0)
+        return encodings.cpu().numpy()
 
 class PositionwiseFeedForward(nn.Module):
     def __init__(self, d_model, d_ff):
