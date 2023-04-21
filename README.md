@@ -45,4 +45,4 @@ I am always open to feedback and suggestions for improvement. If you would like 
 
 ## Contact
 
-If you have any questions or would like to get in touch, please feel free to reach out to me at [your.email@example.com](mailto:your.email@example.com).
+If you have any questions or would like to get in touch, please feel free to reach out to me at [vascoreid@gmail.com](mailto:vascoreid@gmail.com).
