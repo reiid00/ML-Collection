@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import torch
 from transformer_v2 import Transformer
 from utils.function_utils import preprocess_text, generate_masks
+import numpy as np
 
 def plot_positional_encodings(encodings, outfile=None):
     plt.figure(figsize=(10, 10))
@@ -59,4 +60,34 @@ def plot_learning_rate_decay(scheduler, num_steps, outfile=None):
     plt.grid()
     if outfile is not None:
         plt.savefig(outfile)
+    plt.show()
+
+def plot_grad_flow(named_parameters):
+    ave_grads = []
+    max_grads = []
+    layers = []
+    for n, p in named_parameters:
+        if p.requires_grad and "bias" not in n:
+            layers.append(n)
+            ave_grads.append(p.grad.abs().mean())
+            max_grads.append(p.grad.abs().max())
+
+    plt.figure(figsize=(30, 10))
+    plt.bar(np.arange(len(max_grads)), max_grads, alpha=0.5, lw=1, color="salmon", label="Max gradient")
+    plt.bar(np.arange(len(max_grads)), ave_grads, alpha=0.5, lw=1, color="skyblue", label="Mean gradient")
+    plt.hlines(0, 0, len(ave_grads)+1, lw=2, color="k" )
+    
+    ax = plt.gca()
+    ax.set_xticks(range(0, len(ave_grads), 1), minor=False)
+    ax.set_xticklabels(layers, rotation="vertical", fontsize=10)
+    ax.set_xticks(np.arange(-0.5, len(ave_grads) + 0.5, 1), minor=True)
+    ax.tick_params(axis='x', which='minor', length=0)
+
+    plt.xlim(left=0, right=len(ave_grads))
+    plt.ylim(bottom=-0.001, top=None)
+    plt.xlabel("Layers")
+    plt.ylabel("Gradient values")
+    plt.title("Gradient flow")
+    plt.grid(True)
+    plt.legend(loc="upper right")
     plt.show()
