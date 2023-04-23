@@ -6,28 +6,21 @@ Welcome to the `ml-collection` repository! This repository is a showcase of my p
 - [Overview](#overview)
 - [Collection](#collection)
   - [Projects](#projects)
-  - [Papers](#papers)
 - [Getting Started](#getting-started)
 - [Contributing](#contributing)
 - [Contact](#contact)
 
 ## Overview
 
-The `ml-collection` repository is organized into two main folders:
+The `ml-collection` repository:
 
 1. `Projects` - This folder contains the projects I have worked on. Each project is stored in its own subfolder and includes a detailed README, source code, and relevant resources.
-
-2. `Papers` - This folder contains implementations of various ML research papers. Each paper implementation is stored in its own subfolder and includes a detailed README, source code, and relevant resources.
 
 ## Collection
 
 ### Projects
 
 In the `Projects` folder, you will find a variety of projects I have worked on. These projects span various domains and utilize a range of ML techniques. Each project subfolder includes a README file that provides an overview of the project, the problem it addresses, the methodology employed, and the results obtained.
-
-### Papers
-
-In the `Papers` folder, you will find implementations of several ML research papers. Each paper implementation subfolder includes a README file that provides a brief overview of the paper, the techniques used, and the results obtained. The README also includes a link to the original paper for reference.
 
 ## Getting Started
 
